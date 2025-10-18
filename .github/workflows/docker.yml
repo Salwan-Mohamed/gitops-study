@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write    # ✅ allows pushing to GHCR
+  id-token: write    # (optional for OIDC / provenance)
+
 jobs:
   build:
     runs-on: ubuntu-latest
