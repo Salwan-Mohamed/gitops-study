@@ -1,20 +1,22 @@
-# Base image
+# syntax=docker/dockerfile:1
+
+# 1️⃣ Base image
 FROM python:3.11-slim
 
-# Set working directory
+# 2️⃣ Working directory
 WORKDIR /app
 
-# Copy dependency file first
+# 3️⃣ Copy dependencies first (for layer caching)
 COPY requirements.txt .
 
-# Install dependencies
+# 4️⃣ Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all source code
+# 5️⃣ Copy all source code
 COPY . .
 
-# Expose the port
+# 6️⃣ Expose the port
 EXPOSE 8080
 
-# Run the app
+# 7️⃣ Default command
 CMD ["python", "main.py"]
