@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx-multicluster-namespaced
+  namespace: argocd
+spec:
+  generators:
+  - matrix:
+      generators:
+      - clusters: {}
+      - list:
+          elements:
+            - env: dev
+            - env: test
+            - env: prod
+  template:
+    metadata:
+      name: '{{name}}-{{env}}-nginx'
+      annotations:
+        argocd.argoproj.io/sync-options: CreateNamespace=true
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/Salwan-Mohamed/gitops-study.git'
+        targetRevision: main
+        path: 'apps/{{env}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
